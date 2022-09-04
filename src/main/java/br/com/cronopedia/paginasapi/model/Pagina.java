@@ -2,30 +2,30 @@ package br.com.cronopedia.paginasapi.model;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Pagina {
     private static int idCounter = 0;
+    protected SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm");
+
     private int id;
     private String titulo;
     private String autor;
     private Date date = new Date();
-    private SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm");
     private String data;
     private String resumo;
     private String conteudo;
-    // private String assuntos; // -> "titulo, algum termo, outro termo"
     private ArrayList<String> assuntos;
+    private ArrayList<String> imagensURL;
 
     public Pagina() {
         this.id = ++Pagina.idCounter;
         this.data = formatter.format(date);
     }
 
-    public Pagina(String titulo, String autor, String resumo, String conteudo, String assuntos) {
+    public Pagina(String titulo, String autor, String resumo, String conteudo, String assuntos, String url) {
 
         this.id = ++Pagina.idCounter;
         this.data = formatter.format(date);
@@ -36,6 +36,8 @@ public class Pagina {
         this.assuntos = new ArrayList<>();
         this.assuntos.add(titulo);
         this.assuntos.add(assuntos);
+        this.imagensURL = new ArrayList<>();
+        this.imagensURL.add(url);
     }
 
     public int getId() {
@@ -62,7 +64,7 @@ public class Pagina {
         this.autor = autor;
     }
 
-    public String getSeguidores() {
+    public String getResumo() {
         return resumo;
     }
 
@@ -86,24 +88,6 @@ public class Pagina {
         this.data = data;
     }
 
-    // Usando String (Simulando regex)
-    // public void setAssunto(String assuntos) {
-    // this.assuntos = assuntos;
-    // }
-
-    // public void addAssunto(String termo) {
-    // this.assuntos += ", " + termo;
-    // }
-
-    // public void removeAssunto(String termoToRemove, String termoToAdd) {
-    // this.assuntos.replaceAll(termoToRemove, termoToAdd);
-    // }
-
-    // public String getAssuntos() {
-    // return assuntos;
-    // }
-
-    // Usando Array
     public void addAssunto(String termo) {
         this.assuntos.add(termo);
     }
@@ -116,6 +100,18 @@ public class Pagina {
         return assuntos;
     }
 
+    public void addImagem(String url) {
+        this.imagensURL.add(url);
+    }
+
+    public void removeImagem(String urlToRemove) {
+        this.imagensURL.remove(urlToRemove);
+    }
+
+    public ArrayList<String> getImagens() {
+        return imagensURL;
+    }
+
     // Termos identicos
     public Boolean relecionada(String assunto) {
         if (this.getAssuntos().contains(assunto)) {
@@ -125,6 +121,7 @@ public class Pagina {
         return false;
     }
 
+    // Regex
     public Boolean relacionadaRX(String assunto) {
         // Criando um regex de busca
         Pattern pattern = Pattern.compile(assunto, Pattern.CASE_INSENSITIVE);
@@ -141,5 +138,4 @@ public class Pagina {
 
         return false;
     }
-
 }

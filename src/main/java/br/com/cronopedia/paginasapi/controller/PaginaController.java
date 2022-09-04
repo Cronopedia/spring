@@ -1,6 +1,7 @@
 package br.com.cronopedia.paginasapi.controller;
 
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -51,12 +52,15 @@ public class PaginaController {
     // PaginaRepository.update(pagina);
     // }
 
-    // Ou podemos fazer com switch case e alterar apenas o necessário.
-    // Novo parâmetro {tipo de alteração} e cada alteração é uma nova requisição na
-    // API (lento)
-    // 1 = titulo; 2 = resumo ...
+    // Atualizando um campo de uma página
     @PutMapping("/paginas/atualizar/{campo}/{id}")
     public void update(@RequestBody String conteudo, @PathVariable("campo") int campo, @PathVariable("id") int id) {
         PaginaRepository.update(campo, conteudo, id);
+    }
+
+    // Deletando uma página
+    @DeleteMapping("paginas/deletar/{id}")
+    public void delete(@PathVariable("id") int id) {
+        PaginaRepository.delete(id);
     }
 }
