@@ -63,4 +63,10 @@ public class PaginaController {
     public void delete(@PathVariable("id") int id) {
         PaginaRepository.delete(id);
     }
+
+    // Retorna todas as páginas
+    @GetMapping("/paginas/daily")
+    public int getPaginaDoDia() {
+        return PaginaRepository.getPaginaDoDia();
+    }
 }

@@ -2,12 +2,14 @@ package br.com.cronopedia.paginasapi.repository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import br.com.cronopedia.paginasapi.model.Pagina;
 
 public class PaginaRepository {
     private static PaginaRepository repo;
-
+    private static int paginaDoDia;
+    protected static Random random = new Random();
     private ArrayList<Pagina> paginas;
 
     private PaginaRepository() {
@@ -57,6 +59,8 @@ public class PaginaRepository {
                     "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque tortor quam, luctus sed sodales a, fermentum at urna. Curabitur laoreet mi ut pellentesque iaculis. Nunc mollis tellus ac dolor varius, vel iaculis ex tempus.",
                     "Roma",
                     "https://viagemeturismo.abril.com.br/wp-content/uploads/2017/05/moccca7a-com-brinco-pecc81rola.jpg?quality=70&strip=info"));
+
+            paginaDoDia = random.nextInt(PaginaRepository.repo.paginas.size());;
         }
     }
 
@@ -122,5 +126,9 @@ public class PaginaRepository {
     public static void delete(int id) {
         PaginaRepository.repo.paginas
                 .remove(PaginaRepository.repo.paginas.stream().filter((e) -> e.getId() == id).toList().get(0));
+    }
+
+    public static int getPaginaDoDia() {
+        return paginaDoDia;
     }
 }
