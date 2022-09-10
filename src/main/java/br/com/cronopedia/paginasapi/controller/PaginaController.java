@@ -1,5 +1,7 @@
 package br.com.cronopedia.paginasapi.controller;
 
+import org.springframework.boot.configurationprocessor.json.JSONException;
+import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,7 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.cronopedia.paginasapi.model.Pagina;
 import br.com.cronopedia.paginasapi.repository.PaginaRepository;
-
 import java.util.List;
 
 @CrossOrigin
@@ -40,8 +41,26 @@ public class PaginaController {
 
     // Adiciona uma nova página ao repository
     @PostMapping("/paginas/add")
-    public void addPage(@RequestBody Pagina pagina) {
-        PaginaRepository.add(pagina);
+    public void addPage(@RequestBody String e) throws JSONException {
+        // Convertendo o corpo da requisição em JSON
+        JSONObject json = new JSONObject(e);
+
+        // Instânciando uma nova página com as informações recebidas
+        Pagina pagina;
+        try {
+            pagina = new Pagina(
+                    json.getString("titulo"),
+                    json.getString("autor"),
+                    json.getString("resumo"),
+                    json.getString("conteudo"),
+                    json.getString("assuntos"),
+                    json.getString("url"));
+
+            // Adicionando a página no repositório
+            PaginaRepository.add(pagina);
+        } catch (JSONException e1) {
+            e1.printStackTrace();
+        }
     }
 
     // Atualiza a página existente no repositório
@@ -55,6 +74,11 @@ public class PaginaController {
     // Atualizando um campo de uma página
     @PutMapping("/paginas/atualizar/{campo}/{id}")
     public void update(@RequestBody String conteudo, @PathVariable("campo") int campo, @PathVariable("id") int id) {
+
+        // Gambiarra -> mudar para JSON
+        conteudo = conteudo.split(":")[1].toString();
+        conteudo = conteudo.substring(1, conteudo.length() - 2);
+
         PaginaRepository.update(campo, conteudo, id);
     }
 
